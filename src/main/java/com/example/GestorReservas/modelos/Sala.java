@@ -1,7 +1,10 @@
 package com.example.GestorReservas.modelos;
 
 import com.example.GestorReservas.ayudas.TipoSala;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "salas")
@@ -10,16 +13,34 @@ public class Sala {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "nombre",nullable = false, unique = false, length = 50)
     private String nombre;
+    @Column(name = "capacidad",nullable = false, unique = false, length = 20)
     private Integer capacidad;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipoSala",nullable = false, unique = false)
     private TipoSala tipoSala;
+    @Column(name = "ubicacion",nullable = false, unique = false, length = 20)
     private String ubicacion;
+    @Column(name = "numeroPiso",nullable = false, unique = false, length = 20)
     private Integer numeroPiso;
+    @Column(name = "accesoDiscapacidad",nullable = false, unique = false, length = 20)
     private String accesoDiscapacidad;
+    @Column(name = " sonidoDolby",nullable = false, unique = false, length = 20)
     private String sonidoDolby;
+    @Column(name = "anchoPantallaMetros",nullable = false, unique = false, length = 20)
     private Double anchoPantallaMetros;
+    @Column(name = "altoPantallaMetros",nullable = false, unique = false, length = 20)
     private Double altoPantallaMetros;
+    @Column(name = "observacionesTecnicas",nullable = false, unique = false, length = 120)
     private String observacionesTecnicas;
+
+    //relacionandome 1 a N con reserva
+    @OneToMany (mappedBy = "sala")
+    @JsonManagedReference(value = "relacionsalareserva")
+    private List<Reserva> reservas;
+
 
     public Sala() {
     }

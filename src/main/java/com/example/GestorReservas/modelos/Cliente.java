@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "clientes")
@@ -33,21 +34,27 @@ public class Cliente {
     @Column(name = "tipocliente",nullable = false, unique = false)
     private TipoCliente tipocliente ;
     @Column(name = "activo",nullable = false, unique = false)
-    private String activo;
+    private boolean activo;
     @Column(name = "preferenciaIdioma",nullable = false, unique = false, length = 20)
     private String preferenciaIdioma;
 
 
     //relacionandome 1 a 1 con perfil
     @OneToOne
+    @JoinColumn(name = "fk_perfil", referencedColumnName = "id")
+    @JsonManagedReference(value = "relacionclienteperfil")
     private Perfil perfil;
 
+    //relacionandome 1 a N con reservas
+    @OneToMany (mappedBy = "cliente")
+    @JsonManagedReference(value = "relacionclientereserva")
+    private List<Reserva> reservas;
 
 
     public Cliente() {
     }
 
-    public Cliente(Integer id, String nombres, String apellidos, String email, String documento, String telefono, LocalDate fechaRegistro, Integer puntosFidelidad, TipoCliente tipocliente, String activo, String preferenciaIdioma) {
+    public Cliente(Integer id, String nombres, String apellidos, String email, String documento, String telefono, LocalDate fechaRegistro, Integer puntosFidelidad, TipoCliente tipocliente, boolean activo, String preferenciaIdioma, Perfil perfil, List<Reserva> reservas) {
         this.id = id;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -59,6 +66,8 @@ public class Cliente {
         this.tipocliente = tipocliente;
         this.activo = activo;
         this.preferenciaIdioma = preferenciaIdioma;
+        this.perfil = perfil;
+        this.reservas = reservas;
     }
 
     public Integer getId() {
@@ -133,11 +142,11 @@ public class Cliente {
         this.tipocliente = tipocliente;
     }
 
-    public String getActivo() {
+    public boolean isActivo() {
         return activo;
     }
 
-    public void setActivo(String activo) {
+    public void setActivo(boolean activo) {
         this.activo = activo;
     }
 
@@ -147,5 +156,21 @@ public class Cliente {
 
     public void setPreferenciaIdioma(String preferenciaIdioma) {
         this.preferenciaIdioma = preferenciaIdioma;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
     }
 }

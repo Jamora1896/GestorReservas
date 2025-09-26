@@ -1,6 +1,7 @@
 package com.example.GestorReservas.modelos;
 
 import com.example.GestorReservas.ayudas.EstadoCivil;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,23 +13,34 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "fechaNacimiento",nullable = false, unique = false)
     private LocalDate fechaNacimiento;
+    @Column(name = "direccion",nullable = false, unique = false, length = 50)
     private String direccion;
+    @Column(name = "ciudad",nullable = false, unique = false, length = 50)
     private String ciudad;
+    @Column(name = "telefonoAlterno",nullable = false, unique = false, length = 50)
     private String telefonoAlterno;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estadoCivil",nullable = false, unique = false)
     private EstadoCivil estadoCivil ;
+    @Column(name = "ocupacion",nullable = false, unique = false, length = 50)
     private String ocupacion;
+    @Column(name = "preferencias",nullable = false, unique = false, length = 50)
     private String preferencias;
+    @Column(name = "alergias",nullable = false, unique = false, length = 50)
     private String alergias;
+    @Column(name = "marketingOptIn",nullable = false, unique = false, length = 50)
     private String marketingOptIn;
+    @Column(name = "contactoEmergencia",nullable = false, unique = false, length = 50)
     private String contactoEmergencia;
 
 
     //relacionandome 1 a 1 con perfil
-    @OneToOne
+    @OneToOne(mappedBy = "perfil")
+    @JsonBackReference(value = "relacionclienteperfil")
     private Cliente cliente;
-    
-
 
 
     public Perfil() {

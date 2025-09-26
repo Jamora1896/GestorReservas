@@ -1,6 +1,7 @@
 package com.example.GestorReservas.modelos;
 
 import com.example.GestorReservas.ayudas.ClasificacionPelicula;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 
@@ -11,16 +12,34 @@ public class Pelicula {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "titulo",nullable = false, unique = false, length = 50)
     private String  titulo;
+    @Column(name = "sinopsis",nullable = false, unique = false, length = 150)
     private String sinopsis;
+    @Column(name = "duracionMin",nullable = false, unique = false, length = 20)
     private Integer duracionMin;
+    @Column(name = "director",nullable = false, unique = false, length = 50)
     private String director;
+    @Column(name = "anoEstreno",nullable = false, unique = false, length = 20)
     private String anoEstreno;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "clasificacion",nullable = false, unique = false)
     private ClasificacionPelicula clasificacion;
+    @Column(name = "idiomaOriginal",nullable = false, unique = false, length = 20)
     private String idiomaOriginal;
+    @Column(name = "paisOrigen",nullable = false, unique = false, length = 20)
     private String paisOrigen;
+    @Column(name = "ratingPromedio",nullable = false, unique = false, length = 20)
     private Double ratingPromedio;
+    @Column(name = "generoPrincipal",nullable = false, unique = false, length = 20)
     private String generoPrincipal;
+
+    //relacionandome 1 a 1 con reserva
+    @OneToOne(mappedBy = "pelicula")
+    @JsonBackReference(value = "relacionreservapelicula")
+    private Reserva reserva;
+
 
     public Pelicula() {
     }

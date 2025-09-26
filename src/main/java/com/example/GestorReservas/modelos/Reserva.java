@@ -1,6 +1,8 @@
 package com.example.GestorReservas.modelos;
 
 import com.example.GestorReservas.ayudas.EstadoReserva;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,16 +13,47 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "codigoReserva",nullable = false, unique = false, length = 20)
     private String codigoReserva;
+    @Column(name = "fechaHora",nullable = false, unique = false)
     private LocalDateTime fechaHora;
+    @Column(name = "cantidadBoletos",nullable = false, unique = false, length = 20)
     private Integer cantidadBoletos;
+    @Column(name = "precioUnitario",nullable = false, unique = false, length = 50)
     private Double precioUnitario;
+    @Column(name = "total",nullable = false, unique = false, length = 50)
     private Double total;
+    @Column(name = "metodoPago",nullable = false, unique = false, length = 50)
     private String metodoPago;
+    @Column(name = "asientos",nullable = false, unique = false, length = 20)
     private String asientos;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado",nullable = false, unique = false)
     private EstadoReserva estado;
+    @Column(name = "canalVenta",nullable = false, unique = false, length = 50)
     private String canalVenta;
+    @Column(name = "notas",nullable = false, unique = false, length = 150)
     private String notas;
+
+
+    //relacionandome 1 a 1 con pelicula
+    @OneToOne
+    @JoinColumn(name = "fk_pelicula", referencedColumnName = "id")
+    @JsonManagedReference(value = "relacionreservapelicula")
+    private Pelicula pelicula;
+
+    //relacionandome 1 a N con cliente
+    @ManyToOne
+    @JoinColumn(name = "fk_cliente", referencedColumnName = "id")
+    @JsonBackReference(value = "relacionclientereserva")
+    private Cliente cliente;
+
+    //relacionandome 1 a N con sala
+    @ManyToOne
+    @JoinColumn(name = "fk_sala", referencedColumnName = "id")
+    @JsonBackReference(value = "relacionsalareserva")
+    private Sala sala;
 
     public Reserva() {
     }
